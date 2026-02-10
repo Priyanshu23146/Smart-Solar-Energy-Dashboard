@@ -1,34 +1,52 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
+import "./index.css";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="container">
+      <header className="header">
+        <h1>🌞 Smart Solar Energy Dashboard</h1>
+        <p>Weather-based solar power prediction & planning</p>
+      </header>
+
+      <div className="grid">
+        <div className="card">
+          <h3>Today's Generation</h3>
+          <p className="value">18 kWh</p>
+        </div>
+
+        <div className="card">
+          <h3>Tomorrow Prediction</h3>
+          <p className="value warning">11 kWh</p>
+        </div>
+
+        <div className="card">
+          <h3>Risk Level</h3>
+          <p className="value danger">High</p>
+        </div>
       </div>
-      <h1>Welcome Priyanshu</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
+
+      <div className="card full">
+        <h3>🌦️ Tomorrow's Weather</h3>
+        <ul>
+          <li>Cloud Cover: 70%</li>
+          <li>Rain Probability: 60%</li>
+          <li>Temperature: 34°C</li>
+        </ul>
+      </div>
+
+      <div className="card full alert">
+        <h3>⚠️ Smart Recommendation</h3>
         <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
+          Low solar generation expected tomorrow due to cloudy and rainy
+          weather.
         </p>
+        <ul>
+          <li>🔋 Charge batteries today</li>
+          <li>⚡ Run heavy appliances in advance</li>
+          <li>❄️ Reduce non-essential usage tomorrow</li>
+        </ul>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   );
 }
 
