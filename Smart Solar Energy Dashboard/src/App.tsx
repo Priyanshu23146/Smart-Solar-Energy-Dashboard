@@ -1,10 +1,9 @@
 import "./index.css";
-
 import type { WeatherData, SolarConfig } from "./Logic/types.ts";
 import { predictTomorrowPower } from "./Logic/powerPrediction";
-
 import { evaluateRisk } from "./Logic/riskEvaluator.ts";
 import { useEffect, useState } from "react";
+import EnergyChart from "./components/EnergyChart.tsx";
 
 function App() {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -70,6 +69,10 @@ function App() {
           </p>
         </div>
       </div>
+      <EnergyChart
+        today={solarConfig.avgDailyConsumption}
+        tomorrow={predictedPower}
+      />
 
       <div className="card full">
         <h3>🌦️ Tomorrow's Weather</h3>

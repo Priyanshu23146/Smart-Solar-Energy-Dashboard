@@ -4,6 +4,10 @@ body {
   background-color: #f3f4f6;
 }
 
+.card.full {
+  margin-top: 20px;
+}
+
 .container {
   max-width: 900px;
   margin: auto;
