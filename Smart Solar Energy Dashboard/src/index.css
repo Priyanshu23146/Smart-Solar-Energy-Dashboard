@@ -55,3 +55,29 @@ body {
 .alert {
   background-color: #fff7ed;
 }
+
+/* Smooth transition */
+body {
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
+}
+
+/* DARK MODE */
+body.dark {
+  background-color: #0f172a;
+  color: #f8fafc;
+}
+
+body.dark .card {
+  background-color: #1e293b;
+  color: #f8fafc;
+}
+
+body.dark .header {
+  color: #f8fafc;
+}
+
+body.dark .alert {
+  background-color: #3f1d1d;
+}

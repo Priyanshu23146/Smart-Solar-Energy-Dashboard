@@ -4,9 +4,11 @@ import { predictTomorrowPower } from "./Logic/powerPrediction";
 import { evaluateRisk } from "./Logic/riskEvaluator.ts";
 import { useEffect, useState } from "react";
 import EnergyChart from "./components/EnergyChart.tsx";
+import DarkModeButton from "./components/darkMode";
 
 function App() {
   const [currentTime, setCurrentTime] = useState(new Date());
+  // dark mode state is managed internally by <DarkModeButton />
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -46,6 +48,8 @@ function App() {
           {currentTime.toLocaleDateString()} |{" "}
           {currentTime.toLocaleTimeString()}
         </p>
+        {/* centralized dark-mode button handles storage and body class */}
+        <DarkModeButton />
       </header>
 
       <div className="grid">
