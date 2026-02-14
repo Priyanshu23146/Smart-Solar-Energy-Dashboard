@@ -1,3 +1,4 @@
+import { type ReactNode } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Insights from "./pages/Insights";
@@ -10,7 +11,7 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 import { SolarProvider } from "./context/SolarContext";
 import "./index.css";
 
-function ProtectedRoute({ children }: { children: JSX.Element }) {
+function ProtectedRoute({ children }: { children: ReactNode }) {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
 
