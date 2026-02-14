@@ -43,3 +43,33 @@
   margin-top: 30px;
   font-size: 16px;
 }
+
+/* additional customizations */
+.error {
+  color: #dc2626;
+  margin-bottom: 15px;
+}
+
+.appliance-card button {
+  background: #ef4444;
+  padding: 6px 10px;
+  font-size: 12px;
+  transition: background 0.2s ease;
+}
+
+.appliance-card button:hover {
+  background: #dc2626;
+}
+
+@media (max-width: 600px) {
+  .appliance-form {
+    flex-direction: column;
+  }
+}
+
+/* dark mode tweaks */
+body.dark .appliance-card {
+  background: #1e293b;
+  border-color: #334155;
+  color: #f8fafc;
+}

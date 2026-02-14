@@ -1,0 +1,31 @@
+﻿/* Basic layout for settings page */
+.settings-page {
+  padding: 40px 80px;
+}
+
+.setting-item {
+  margin-bottom: 20px;
+}
+
+.setting-item label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.setting-item input,
+.setting-item select {
+  padding: 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .settings-page { padding: 20px; }
+}
+
+/* dark mode tweaks */
+body.dark .settings-page {
+  color: #f8fafc;
+}

@@ -1,0 +1,28 @@
+﻿/* Basic layout for insights page */
+.insights-page {
+  padding: 40px 80px;
+}
+
+.insights-page h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+/* placeholder for charts or tables */
+.chart {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+}
+
+@media (max-width: 768px) {
+  .insights-page { padding: 20px; }
+}
+
+/* dark mode tweaks */
+body.dark .chart {
+  background: #1e293b;
+  border-color: #334155;
+  color: #f8fafc;
+}

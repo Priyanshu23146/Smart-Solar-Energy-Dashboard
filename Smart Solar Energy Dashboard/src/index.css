@@ -23,7 +23,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 20px 80px;
-  background: #ffffff;
+  background: #1e293b;
   border-bottom: 1px solid #e2e8f0;
 }
 
@@ -60,4 +60,27 @@ body {
 body.dark {
   background: #0f172a;
   color: #f8fafc;
+}
+
+/* theme toggle button used in darkMode component */
+.theme-btn {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.theme-btn:hover {
+  background: #1e40af;
+}
+
+/* dark-mode adjustments for navbar/footer */
+body.dark .navbar {
+  background: #111827;
+}
+body.dark .footer {
+  background: #1f2937;
 }
