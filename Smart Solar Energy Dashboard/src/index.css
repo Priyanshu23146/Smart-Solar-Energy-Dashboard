@@ -251,3 +251,8 @@ body.dark .recommendation-card {
 body.dark .footer {
   background: #020617;
 }
+
+.nav-links a.active {
+  color: #2563eb;
+  font-weight: 600;
+}

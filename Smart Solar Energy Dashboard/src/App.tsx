@@ -5,6 +5,11 @@ import { evaluateRisk } from "./Logic/riskEvaluator.ts";
 import { useEffect, useState } from "react";
 import EnergyChart from "./components/EnergyChart.tsx";
 import DarkModeButton from "./components/darkMode";
+import { Routes, Route, NavLink } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
+import Insights from "./pages/Insights";
+import Appliances from "./pages/Appliances";
+import Settings from "./pages/Settings";
 
 function App() {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -46,10 +51,10 @@ function App() {
         <div className="logo">🌞 SolarSmart</div>
 
         <nav className="nav-links">
-          <a href="#">Dashboard</a>
-          <a href="#">Insights</a>
-          <a href="#">Appliances</a>
-          <a href="#">Settings</a>
+          <NavLink to="/">Dashboard</NavLink>
+          <NavLink to="/insights">Insights</NavLink>
+          <NavLink to="/appliances">Appliances</NavLink>
+          <NavLink to="/settings">Settings</NavLink>
         </nav>
 
         <DarkModeButton />
@@ -66,6 +71,13 @@ function App() {
           {currentTime.toLocaleDateString()} •{" "}
           {currentTime.toLocaleTimeString()}
         </div>
+        <br />
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/insights" element={<Insights />} />
+          <Route path="/appliances" element={<Appliances />} />
+          <Route path="/settings" element={<Settings />} />
+        </Routes>
       </section>
 
       {/* ================= SUMMARY CARDS ================= */}
