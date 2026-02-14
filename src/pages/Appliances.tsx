@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
-import "./Appliances.css";
+import {
+  fetchAppliances,
+  addAppliance,
+  deleteAppliance,
+} from "../api/client";
+import styles from "./Appliances.module.css";
+
 interface Appliance {
-  _id?: string;
+  id?: number; // Backend returns id, but new ones might not have it yet if type mismatch, but backend DOES return it.
   name: string;
   power: number;
 }
@@ -9,32 +15,22 @@ interface Appliance {
 export default function Appliances() {
   const [appliances, setAppliances] = useState<Appliance[]>([]);
   const [name, setName] = useState("");
-  const [power, setPower] = useState<number>(0);
+  const [power, setPower] = useState<string>(""); // Use string input for better UX
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // future backend endpoint
-  // const API_URL = "http://localhost:5000/appliances";
-
   // ================= FETCH APPLIANCES =================
   useEffect(() => {
-    fetchAppliances();
+    loadAppliances();
   }, []);
 
-  async function fetchAppliances() {
+  async function loadAppliances() {
     try {
       setLoading(true);
-
-      // For now simulate empty response
-      // Replace this when backend ready:
-      // const res = await fetch(API_URL);
-      // const data = await res.json();
-
-      const data: Appliance[] = [];
-
+      const data = await fetchAppliances();
       setAppliances(data);
       setError("");
-    } catch (err) {
+    } catch {
       setError("Failed to load appliances.");
     } finally {
       setLoading(false);
@@ -43,26 +39,17 @@ export default function Appliances() {
 
   // ================= ADD APPLIANCE =================
   async function handleAdd() {
-    if (!name || power <= 0) return;
+    const powerVal = Number(power);
+    if (!name || powerVal <= 0) return;
 
     try {
       setLoading(true);
-
-      const newAppliance: Appliance = { name, power };
-
-      // Backend-ready structure:
-      // await fetch(API_URL, {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify(newAppliance),
-      // });
-
-      setAppliances([...appliances, newAppliance]);
-
+      const newApp = await addAppliance(name, powerVal);
+      setAppliances([...appliances, newApp]);
       setName("");
-      setPower(0);
+      setPower("");
       setError("");
-    } catch (err) {
+    } catch {
       setError("Failed to add appliance.");
     } finally {
       setLoading(false);
@@ -70,18 +57,12 @@ export default function Appliances() {
   }
 
   // ================= DELETE =================
-  async function handleDelete(index: number) {
+  async function handleDelete(id: number) {
     try {
       setLoading(true);
-
-      // Backend-ready structure:
-      // await fetch(`${API_URL}/${appliances[index]._id}`, {
-      //   method: "DELETE",
-      // });
-
-      const updated = appliances.filter((_, i) => i !== index);
-      setAppliances(updated);
-    } catch (err) {
+      await deleteAppliance(id);
+      setAppliances(appliances.filter((a) => a.id !== id));
+    } catch {
       setError("Failed to delete appliance.");
     } finally {
       setLoading(false);
@@ -90,54 +71,61 @@ export default function Appliances() {
 
   const totalConsumption = appliances.reduce(
     (sum, item) => sum + item.power,
-    0,
+    0
   );
 
   return (
-    <section className="appliances-page">
-      <h2>Manage Appliances</h2>
+    <section className={styles.container}>
+      <h2 className={styles.title}>Manage Appliances</h2>
 
       {/* ADD FORM */}
-      <div className="appliance-form">
+      <div className={styles.form}>
         <input
           type="text"
           placeholder="Appliance Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          className={styles.input}
         />
 
         <input
           type="number"
           placeholder="Power (kWh)"
           value={power}
-          onChange={(e) => setPower(Number(e.target.value))}
+          onChange={(e) => setPower(e.target.value)}
+          className={styles.input}
         />
 
-        <button onClick={handleAdd} disabled={loading}>
-          Add
+        <button onClick={handleAdd} disabled={loading} className={styles.addButton}>
+          {loading ? "Adding..." : "Add Appliance"}
         </button>
       </div>
 
-      {error && <p className="error">{error}</p>}
+      {error && <p className={styles.error}>{error}</p>}
 
       {/* LIST */}
-      <div className="appliance-list">
+      <div className={styles.list}>
         {appliances.length === 0 && !loading && <p>No appliances added yet.</p>}
 
-        {appliances.map((item, index) => (
-          <div key={index} className="appliance-card">
-            <div>
+        {appliances.map((item) => (
+          <div key={item.id} className={styles.card}>
+            <div className={styles.cardInfo}>
               <strong>{item.name}</strong>
               <p>{item.power} kWh</p>
             </div>
-            <button onClick={() => handleDelete(index)}>Remove</button>
+            <button
+              onClick={() => item.id && handleDelete(item.id)}
+              className={styles.deleteButton}
+            >
+              Remove
+            </button>
           </div>
         ))}
       </div>
 
       {/* TOTAL */}
-      <div className="total-consumption">
-        Total Daily Consumption: <strong>{totalConsumption} kWh</strong>
+      <div className={styles.total}>
+        Total Daily Consumption: <strong className={styles.strong}>{totalConsumption} kWh</strong>
       </div>
     </section>
   );

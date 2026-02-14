@@ -1,0 +1,45 @@
+.container {
+    padding: 1.5rem;
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    border-left: 6px solid;
+}
+
+.surplus {
+    background: #f0fdf4;
+    border-left-color: #22c55e;
+}
+
+.deficit {
+    background: #fef2f2;
+    border-left-color: #ef4444;
+}
+
+.title {
+    margin: 0 0 1rem 0;
+    font-size: 1.25rem;
+    color: #1e293b;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.status {
+    font-size: 1.1rem;
+    color: #334155;
+    margin: 0;
+}
+
+.list {
+    margin: 0;
+    padding-left: 1.25rem;
+    color: #475569;
+}
+
+.list li {
+    margin-bottom: 0.25rem;
+}

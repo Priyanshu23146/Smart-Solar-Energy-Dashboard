@@ -1,0 +1,14 @@
+{
+  "users": [
+    {
+      "id": "1771098765866",
+      "username": "kumar",
+      "password": "Kumar@98",
+      "city": "kanpur",
+      "panelCapacity": 5,
+      "batteryCapacity": 10,
+      "avgDailyConsumption": 18,
+      "appliances": []
+    }
+  ]
+}

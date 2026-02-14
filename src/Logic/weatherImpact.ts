@@ -15,9 +15,10 @@ export function calculateWeatherImpact(weather: WeatherData): number {
     efficiency -= 0.2;
   }
 
-  // Heat effect
-  if (weather.temperature > 40) {
-    efficiency -= 0.1;
+  // Heat effect (approx -0.4% per degree above 25C)
+  if (weather.temperature > 25) {
+    const heatLoss = (weather.temperature - 25) * 0.004;
+    efficiency -= heatLoss;
   }
 
   return Math.max(efficiency, 0.3); // minimum efficiency cap
