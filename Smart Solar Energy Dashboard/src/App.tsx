@@ -74,8 +74,8 @@ function App() {
         </div>
       </div>
       <EnergyChart
-        today={solarConfig.avgDailyConsumption}
-        tomorrow={predictedPower}
+        currentConsumption={solarConfig.avgDailyConsumption}
+        predictedProduction={predictedPower}
       />
 
       <div className="card full">
