@@ -1,0 +1,45 @@
+.appliances-page {
+  padding: 40px 80px;
+}
+
+.appliance-form {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.appliance-form input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+}
+
+.appliance-form button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+}
+
+.appliance-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.appliance-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  padding: 15px 20px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+}
+
+.total-consumption {
+  margin-top: 30px;
+  font-size: 16px;
+}

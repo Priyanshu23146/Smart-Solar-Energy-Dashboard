@@ -1,0 +1,71 @@
+.hero {
+  text-align: center;
+  padding: 80px 20px 60px 20px;
+}
+
+.hero h1 {
+  font-size: 38px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.hero p {
+  font-size: 16px;
+  color: #64748b;
+  margin-bottom: 20px;
+}
+
+.time-display {
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+/* SUMMARY CARDS */
+
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  padding: 40px 80px;
+}
+
+.summary-card {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.number {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+/* WEATHER */
+
+.weather-section {
+  padding: 20px 80px;
+}
+
+.weather-card {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+}
+
+/* RECOMMENDATION */
+
+.recommendation-section {
+  padding: 20px 80px 60px 80px;
+}
+
+.recommendation-card {
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  padding: 25px;
+  border-radius: 14px;
+}
