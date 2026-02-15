@@ -8,28 +8,37 @@ interface SmartAlertsProps {
 export default function SmartAlerts({ predictedPower, avgConsumption }: SmartAlertsProps) {
     const surplus = predictedPower - avgConsumption;
     const isSurplus = surplus > 0;
+    const currentHour = new Date().getHours();
+    const isDaytime = currentHour >= 6 && currentHour <= 18;
 
-    // Simple logic for recommendations
-    const recommendations = isSurplus
-        ? [
-            "Run high-power appliances (Washing Machine, AC) now.",
-            "Charge your EV or backup batteries.",
-            "Great day for solar production!",
-        ]
-        : [
-            "Conserve energy: Avoid using Heater or AC.",
-            "Shift heavy usage to tomorrow if possible.",
-            "Battery levels might drop faster today.",
-        ];
+    // Smart recommendations based on surplus and time
+    const recommendations = [];
+
+    if (isSurplus) {
+        recommendations.push("High solar production expected tomorrow!");
+        if (isDaytime) {
+            recommendations.push("Perfect time to run washing machines or dishwashers.");
+            recommendations.push("Charge electric vehicles now to utilize excess power.");
+        } else {
+            recommendations.push("Plan to run heavy appliances tomorrow afternoon.");
+        }
+    } else {
+        recommendations.push("Low solar production forecast.");
+        recommendations.push("Conserve energy where possible.");
+        if (currentHour >= 17) {
+            recommendations.push("Battery levels may be critical tonight - minimize usage.");
+        }
+    }
 
     return (
         <div className={`${styles.container} ${isSurplus ? styles.surplus : styles.deficit}`}>
             <h3 className={styles.title}>
-                {isSurplus ? "🌱 High Solar Production Alert" : "⚠️ Low Solar Production Alert"}
+                {isSurplus ? "🌱 high Efficiency Alert" : "⚠️ Low Efficiency Alert"}
             </h3>
             <div className={styles.content}>
                 <p className={styles.status}>
-                    Predicted Surplus: <strong>{isSurplus ? `+${surplus.toFixed(1)}` : surplus.toFixed(1)} kWh</strong>
+                    Predicted {isSurplus ? "Surplus" : "Deficit"}:
+                    <strong> {isSurplus ? "+" : ""}{surplus.toFixed(1)} kWh</strong>
                 </p>
                 <ul className={styles.list}>
                     {recommendations.map((rec, index) => (

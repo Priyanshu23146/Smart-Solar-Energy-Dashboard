@@ -129,7 +129,9 @@ export async function fetchWeather() {
             temperature: 25,
             cloudCover: 10,
             rainProbability: 0,
-            sunHours: 8
+            sunHours: 8,
+            humidity: 50,
+            windSpeed: 10
         };
     }
 }

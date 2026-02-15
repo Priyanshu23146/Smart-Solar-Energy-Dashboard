@@ -1,73 +1,79 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { loginApi } from "../api/client";
 import styles from "./Auth.module.css";
 
 export default function Login() {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const [formData, setFormData] = useState({ username: "", password: "" });
     const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false);
     const { login } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
 
-    async function handleSubmit(e: React.FormEvent) {
+    const from = location.state?.from?.pathname || "/";
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
-        setLoading(true);
 
         try {
-            const user = await loginApi({ username, password });
-            login(user); // AuthContext
-            navigate("/"); // Redirect to dashboard
+            const user = await loginApi(formData);
+            login(user);
+            navigate(from, { replace: true });
         } catch (err: any) {
-            setError(err.message || "Login failed");
-        } finally {
-            setLoading(false);
+            setError(err.message || "Failed to login");
         }
-    }
+    };
 
     return (
         <div className={styles.container}>
-            <div className={styles.card}>
-                <h1 className={styles.title}>Welcome Back</h1>
+            <div className={styles.authCard}>
+                <h2 className={styles.title}>Welcome Back</h2>
+                <p className={styles.subtitle}>Manage your solar energy efficiently</p>
 
                 {error && <div className={styles.error}>{error}</div>}
 
                 <form onSubmit={handleSubmit} className={styles.form}>
-                    <div className={styles.inputGroup}>
+                    <div className={styles.formGroup}>
                         <label className={styles.label}>Username</label>
                         <input
                             type="text"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            name="username"
                             className={styles.input}
+                            value={formData.username}
+                            onChange={handleChange}
                             placeholder="Enter your username"
                             required
                         />
                     </div>
 
-                    <div className={styles.inputGroup}>
+                    <div className={styles.formGroup}>
                         <label className={styles.label}>Password</label>
                         <input
                             type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            name="password"
                             className={styles.input}
+                            value={formData.password}
+                            onChange={handleChange}
                             placeholder="Enter your password"
                             required
                         />
                     </div>
 
-                    <button type="submit" disabled={loading} className={styles.button}>
-                        {loading ? "Signing in..." : "Sign In"}
+                    <button type="submit" className={styles.button}>
+                        Sign In
                     </button>
                 </form>
 
-                <div className={styles.footer}>
-                    Don't have an account? <Link to="/signup" className={styles.link}>Sign up</Link>
-                </div>
+                <p className={styles.linkText}>
+                    Don't have an account?
+                    <Link to="/signup" className={styles.link}>Sign up</Link>
+                </p>
             </div>
         </div>
     );

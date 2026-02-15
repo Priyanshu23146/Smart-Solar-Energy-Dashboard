@@ -3,68 +3,92 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: #f1f5f9;
+    padding: 2rem;
 }
 
-.card {
-    background: white;
+.authCard {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
     padding: 2.5rem;
-    border-radius: 1rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border-radius: 24px;
     width: 100%;
-    max-width: 400px;
+    max-width: 420px;
+    box-shadow: var(--glass-shadow);
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .title {
     text-align: center;
-    font-size: 1.875rem;
+    font-size: 2rem;
     font-weight: 700;
-    color: #1e293b;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+    text-align: center;
+    color: var(--text-muted);
     margin-bottom: 2rem;
+    font-size: 0.95rem;
 }
 
 .form {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1.25rem;
 }
 
-.inputGroup {
+.formGroup {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
 }
 
 .label {
-    font-size: 0.875rem;
+    color: var(--text-main);
+    font-size: 0.9rem;
     font-weight: 500;
-    color: #475569;
 }
 
 .input {
-    padding: 0.75rem;
-    border: 1px solid #cbd5e1;
-    border-radius: 0.5rem;
-    font-size: 1rem;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--glass-border);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    color: var(--text-main);
     transition: all 0.2s;
 }
 
 .input:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
 }
 
 .button {
-    background: #3b82f6;
+    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
     color: white;
-    padding: 0.75rem;
-    border-radius: 0.5rem;
+    padding: 0.875rem;
+    border-radius: 8px;
     border: none;
     font-weight: 600;
-    font-size: 1rem;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: all 0.2s;
     margin-top: 1rem;
 }
 

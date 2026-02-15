@@ -100,28 +100,53 @@ export default function Dashboard() {
         </div>
       </section>
 
-      {/* CHART */}
-      <section className={styles.chartContainer}>
-        <h3 className={styles.chartTitle}>Energy Distribution (Next 24 Hours)</h3>
+      {/* CHART & WEATHER GRID */}
+      <div className={styles.mainGrid}>
+        <section className={styles.chartContainer}>
+          <h3 className={styles.chartTitle}>Energy Distribution (Next 24 Hours)</h3>
+          <EnergyChart
+            currentConsumption={solarConfig.avgDailyConsumption}
+            predictedProduction={predictedPower}
+          />
+        </section>
 
-        <EnergyChart
-          currentConsumption={solarConfig.avgDailyConsumption}
-          predictedProduction={predictedPower}
-        />
-      </section>
+        <section className={styles.weatherCard}>
+          <div className={styles.weatherHeader}>
+            <h3>🌦️ Weather Forecast</h3>
+          </div>
 
-      {/* WEATHER */}
-      <section className={styles.weatherSection}>
-        <div className={styles.weatherCard}>
-          <h3>🌦️ Weather Forecast</h3>
-          <ul>
-            <li>Cloud Cover: {weatherData.cloudCover}%</li>
-            <li>Rain Probability: {weatherData.rainProbability}%</li>
-            <li>Temperature: {weatherData.temperature}°C</li>
-            <li>Sun Hours: {weatherData.sunHours} hrs</li>
-          </ul>
-        </div>
-      </section>
+          <div className={styles.weatherMain}>
+            <div className={styles.weatherIcon}>
+              {weatherData.cloudCover > 50 ? "☁️" : weatherData.rainProbability > 0 ? "🌧️" : "☀️"}
+            </div>
+            <div>
+              <div className={styles.weatherTemp}>{weatherData.temperature}°C</div>
+              <div className={styles.weatherCondition}>
+                {weatherData.rainProbability > 0 ? "Rainy" : weatherData.cloudCover > 50 ? "Cloudy" : "Sunny"}
+              </div>
+            </div>
+          </div>
+
+          <div className={styles.weatherGrid}>
+            <div className={styles.weatherItem}>
+              <span className={styles.weatherLabel}>☁️ Cloud Cover</span>
+              <span className={styles.weatherValue}>{weatherData.cloudCover}%</span>
+            </div>
+            <div className={styles.weatherItem}>
+              <span className={styles.weatherLabel}>💧 Humidity</span>
+              <span className={styles.weatherValue}>{weatherData.humidity ?? 50}%</span>
+            </div>
+            <div className={styles.weatherItem}>
+              <span className={styles.weatherLabel}>🌬️ Wind</span>
+              <span className={styles.weatherValue}>{weatherData.windSpeed ?? 10} km/h</span>
+            </div>
+            <div className={styles.weatherItem}>
+              <span className={styles.weatherLabel}>☔ Rain</span>
+              <span className={styles.weatherValue}>{weatherData.rainProbability} mm</span>
+            </div>
+          </div>
+        </section>
+      </div>
     </>
   );
 }

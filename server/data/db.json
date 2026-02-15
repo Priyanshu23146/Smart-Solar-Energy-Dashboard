@@ -1,10 +1,10 @@
 {
   "users": [
     {
-      "id": "1771098765866",
-      "username": "kumar",
-      "password": "Kumar@98",
-      "city": "delhi",
+      "id": "1771175583985",
+      "username": "Priyanshu",
+      "password": "$2b$10$7jbMQkDLu8A2UZhe5LcseerBOwHflsdvGCrFxQ8WAIUK2N3GDJGIK",
+      "city": "kanpur",
       "panelCapacity": 5,
       "batteryCapacity": 10,
       "avgDailyConsumption": 18,

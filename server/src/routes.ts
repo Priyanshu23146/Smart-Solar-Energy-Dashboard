@@ -142,7 +142,7 @@ export function setupRoutes(app: Express) {
 
             // 2. Weather
             const weatherRes = await fetch(
-                `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,cloud_cover,rain&daily=sunrise,sunset,sunshine_duration&timezone=auto`
+                `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,cloud_cover,rain,relative_humidity_2m,wind_speed_10m&daily=sunrise,sunset,sunshine_duration&timezone=auto`
             );
             const weatherData: any = await weatherRes.json();
 
@@ -154,14 +154,10 @@ export function setupRoutes(app: Express) {
             res.json({
                 temperature: weatherData.current.temperature_2m,
                 cloudCover: weatherData.current.cloud_cover,
-                rainProbability: weatherData.current.rain, // Open-Meteo 'rain' is mm, but for simplicity let's use it or cloud cover proxy
-                // Note: Open-Meteo has 'precipitation_probability' in hourly, not current. 
-                // For 'current', let's just send what we have. 
-                // Better: Use daily max/min or hourly data. 
-                // For simplicity, let's map 'rain' (mm) > 0 ? 100 : 0 as probability if exact not available, 
-                // OR just fetch hourly and take current hour.
-                // Let's stick to simple current params for now.
-                sunHours: sunHours > 0 ? sunHours : 5, // Fallback if 0 (night time or error)
+                rainProbability: weatherData.current.rain,
+                sunHours: sunHours > 0 ? sunHours : 5,
+                humidity: weatherData.current.relative_humidity_2m,
+                windSpeed: weatherData.current.wind_speed_10m,
             });
 
         } catch (error) {

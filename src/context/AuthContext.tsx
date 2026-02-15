@@ -11,20 +11,38 @@ interface AuthContextType {
     login: (userData: User) => void;
     logout: () => void;
     isAuthenticated: boolean;
+    theme: "light" | "dark";
+    toggleTheme: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
+    const [theme, setTheme] = useState<"light" | "dark">("dark");
 
     useEffect(() => {
-        // Check localStorage on load
+        // Check localStorage for user and theme
         const storedUser = localStorage.getItem("solar_user");
         if (storedUser) {
             setUser(JSON.parse(storedUser));
         }
+
+        const storedTheme = localStorage.getItem("solar_theme") as "light" | "dark";
+        if (storedTheme) {
+            setTheme(storedTheme);
+            document.documentElement.setAttribute("data-theme", storedTheme);
+        } else {
+            document.documentElement.setAttribute("data-theme", "dark");
+        }
     }, []);
+
+    const toggleTheme = () => {
+        const newTheme = theme === "light" ? "dark" : "light";
+        setTheme(newTheme);
+        localStorage.setItem("solar_theme", newTheme);
+        document.documentElement.setAttribute("data-theme", newTheme);
+    };
 
     const login = (userData: User) => {
         setUser(userData);
@@ -38,7 +56,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user }}>
+        <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user, theme, toggleTheme }}>
             {children}
         </AuthContext.Provider>
     );

@@ -5,81 +5,88 @@ import { signupApi } from "../api/client";
 import styles from "./Auth.module.css";
 
 export default function Signup() {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [city, setCity] = useState("");
+    const [formData, setFormData] = useState({
+        username: "",
+        password: "",
+        city: "",
+    });
     const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false);
-    const { login } = useAuth(); // Auto-login after signup
+    const { login } = useAuth();
     const navigate = useNavigate();
 
-    async function handleSubmit(e: React.FormEvent) {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
-        setLoading(true);
 
         try {
-            const user = await signupApi({ username, password, city });
+            const user = await signupApi(formData);
             login(user);
             navigate("/");
         } catch (err: any) {
-            setError(err.message || "Signup failed");
-        } finally {
-            setLoading(false);
+            setError(err.message || "Failed to sign up");
         }
-    }
+    };
 
     return (
         <div className={styles.container}>
-            <div className={styles.card}>
-                <h1 className={styles.title}>Create Account</h1>
+            <div className={styles.authCard}>
+                <h2 className={styles.title}>Create Account</h2>
+                <p className={styles.subtitle}>Join the smart energy revolution</p>
 
                 {error && <div className={styles.error}>{error}</div>}
 
                 <form onSubmit={handleSubmit} className={styles.form}>
-                    <div className={styles.inputGroup}>
+                    <div className={styles.formGroup}>
                         <label className={styles.label}>Username</label>
                         <input
                             type="text"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            name="username"
                             className={styles.input}
+                            value={formData.username}
+                            onChange={handleChange}
                             placeholder="Choose a username"
                             required
                         />
                     </div>
 
-                    <div className={styles.inputGroup}>
-                        <label className={styles.label}>Password</label>
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className={styles.input}
-                            placeholder="Choose a password"
-                            required
-                        />
-                    </div>
-
-                    <div className={styles.inputGroup}>
-                        <label className={styles.label}>City (for weather)</label>
+                    <div className={styles.formGroup}>
+                        <label className={styles.label}>Location (City)</label>
                         <input
                             type="text"
-                            value={city}
-                            onChange={(e) => setCity(e.target.value)}
+                            name="city"
                             className={styles.input}
+                            value={formData.city}
+                            onChange={handleChange}
                             placeholder="e.g. Mumbai"
                         />
                     </div>
 
-                    <button type="submit" disabled={loading} className={styles.button}>
-                        {loading ? "Creating account..." : "Sign Up"}
+                    <div className={styles.formGroup}>
+                        <label className={styles.label}>Password</label>
+                        <input
+                            type="password"
+                            name="password"
+                            className={styles.input}
+                            value={formData.password}
+                            onChange={handleChange}
+                            placeholder="Create a password"
+                            required
+                        />
+                    </div>
+
+                    <button type="submit" className={styles.button}>
+                        Sign Up
                     </button>
                 </form>
 
-                <div className={styles.footer}>
-                    Already have an account? <Link to="/login" className={styles.link}>Sign in</Link>
-                </div>
+                <p className={styles.linkText}>
+                    Already have an account?
+                    <Link to="/login" className={styles.link}>Login</Link>
+                </p>
             </div>
         </div>
     );

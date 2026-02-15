@@ -1,69 +1,87 @@
 .container {
     padding: 2rem;
-    max-width: 1200px;
+    max-width: 800px;
     margin: 0 auto;
 }
 
 .title {
     font-size: 2rem;
-    color: #1e293b;
     margin-bottom: 2rem;
     text-align: center;
+    background: linear-gradient(135deg, var(--text-main) 0%, var(--text-muted) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .form {
-    background: white;
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
     padding: 2rem;
-    border-radius: 1rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
     display: flex;
     gap: 1rem;
     margin-bottom: 3rem;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    border: 1px solid #e2e8f0;
 }
 
 .input {
     padding: 0.75rem 1rem;
-    border: 1px solid #cbd5e1;
-    border-radius: 0.5rem;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
+    border-radius: 8px;
     font-size: 1rem;
     outline: none;
     transition: all 0.2s;
     min-width: 250px;
 }
 
+.input::placeholder {
+    color: var(--text-muted);
+    opacity: 0.7;
+}
+
 .input:focus {
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
 }
 
 .addButton {
     padding: 0.75rem 2rem;
-    background: #3b82f6;
+    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
     color: white;
     border: none;
-    border-radius: 0.5rem;
+    border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: all 0.2s;
 }
 
 .addButton:hover {
-    background: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
 }
 
 .addButton:disabled {
-    background: #94a3b8;
+    background: var(--text-muted);
     cursor: not-allowed;
+    transform: none;
 }
 
 .error {
-    color: #ef4444;
+    color: var(--danger);
     text-align: center;
     margin-bottom: 1rem;
+    padding: 0.5rem;
+    background: rgba(239, 68, 68, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
 .list {
@@ -74,61 +92,67 @@
 }
 
 .card {
-    background: white;
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
     padding: 1.5rem;
-    border-radius: 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border-radius: 16px;
+    border: 1px solid var(--glass-border);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border: 1px solid #f1f5f9;
     transition: transform 0.2s;
 }
 
 .card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 .cardInfo h3 {
     margin: 0;
     font-size: 1.1rem;
-    color: #334155;
+    color: var(--text-main);
+}
+
+.cardInfo strong {
+    color: var(--text-main);
+    display: block;
+    margin-bottom: 0.25rem;
 }
 
 .cardInfo p {
-    margin: 0.25rem 0 0;
-    color: #64748b;
+    margin: 0;
+    color: var(--text-muted);
     font-size: 0.9rem;
 }
 
 .deleteButton {
-    background: #fee2e2;
-    color: #ef4444;
-    border: none;
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+    border: 1px solid rgba(239, 68, 68, 0.2);
     padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
+    border-radius: 8px;
     cursor: pointer;
     font-weight: 500;
     transition: all 0.2s;
 }
 
 .deleteButton:hover {
-    background: #fecaca;
-    color: #dc2626;
+    background: var(--danger);
+    color: white;
 }
 
 .total {
     text-align: center;
     font-size: 1.25rem;
-    color: #334155;
-    background: #f8fafc;
+    color: var(--text-main);
+    background: var(--glass-bg);
     padding: 1.5rem;
-    border-radius: 1rem;
-    border: 1px dashed #cbd5e1;
+    border-radius: 16px;
+    border: 1px solid var(--glass-border);
 }
 
 .strong {
-    color: #0f172a;
+    color: var(--accent);
     font-weight: 700;
 }
