@@ -11,6 +11,7 @@ interface AuthContextType {
     login: (userData: User) => void;
     logout: () => void;
     isAuthenticated: boolean;
+    loading: boolean;
     theme: "light" | "dark";
     toggleTheme: () => void;
 }
@@ -20,12 +21,18 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [theme, setTheme] = useState<"light" | "dark">("dark");
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         // Check localStorage for user and theme
         const storedUser = localStorage.getItem("solar_user");
         if (storedUser) {
-            setUser(JSON.parse(storedUser));
+            try {
+                setUser(JSON.parse(storedUser));
+            } catch (error) {
+                console.error("Failed to parse stored user:", error);
+                localStorage.removeItem("solar_user");
+            }
         }
 
         const storedTheme = localStorage.getItem("solar_theme") as "light" | "dark";
@@ -35,6 +42,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         } else {
             document.documentElement.setAttribute("data-theme", "dark");
         }
+
+        setLoading(false);
     }, []);
 
     const toggleTheme = () => {
@@ -56,8 +65,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user, theme, toggleTheme }}>
-            {children}
+        <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user, loading, theme, toggleTheme }}>
+            {loading ? (
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100vh',
+                    background: 'var(--background)',
+                    color: 'var(--text-main)'
+                }}>
+                    Loading...
+                </div>
+            ) : children}
         </AuthContext.Provider>
     );
 }

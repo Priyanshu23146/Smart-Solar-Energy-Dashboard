@@ -24,7 +24,14 @@ export default function Insights() {
   } | null>(null);
 
   useEffect(() => {
-    fetchWeather().then(setWeather);
+    fetchWeather().then((data: any) => {
+      // Handle new structure where current weather is in data.current
+      if (data && data.current) {
+        setWeather(data.current);
+      } else {
+        setWeather(data);
+      }
+    });
   }, []);
 
   // Simulated Weekly Data

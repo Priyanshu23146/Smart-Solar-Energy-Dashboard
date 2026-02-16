@@ -4,11 +4,14 @@
       "id": "1771175583985",
       "username": "Priyanshu",
       "password": "$2b$10$7jbMQkDLu8A2UZhe5LcseerBOwHflsdvGCrFxQ8WAIUK2N3GDJGIK",
-      "city": "kanpur",
+      "city": "Dhampur",
       "panelCapacity": 5,
       "batteryCapacity": 10,
       "avgDailyConsumption": 18,
-      "appliances": []
+      "appliances": [],
+      "country": "India",
+      "state": "Uttar Pradesh",
+      "pincode": "246745"
     }
   ]
 }

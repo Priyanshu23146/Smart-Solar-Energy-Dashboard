@@ -5,7 +5,7 @@ import {
   updateConfig,
   addAppliance as addApplianceApi,
   deleteAppliance as deleteApplianceApi,
-  fetchWeather,
+  fetchWeather as clientFetchWeather,
 } from "../api/client";
 
 interface Appliance {
@@ -16,23 +16,37 @@ interface Appliance {
 
 interface SolarState {
   city: string;
+  country: string;
+  state: string;
+  pincode: string;
   panelCapacity: number;
   batteryCapacity: number;
   avgDailyConsumption: number;
   appliances: Appliance[];
   weather?: {
-    temperature: number;
-    cloudCover: number;
-    rainProbability: number;
-    sunHours: number;
+    current: {
+      temperature: number;
+      cloudCover: number;
+      rainProbability: number;
+      sunHours: number;
+      humidity?: number;
+      windSpeed?: number;
+      predictedProduction?: number;
+      prediction?: number;
+    };
+    today: Array<{ time: string; production: number }>;
+    tomorrow: Array<{ time: string; production: number }>;
   };
 }
 
 interface SolarContextType extends SolarState {
-  setCity: (city: string) => void;
-  setPanelCapacity: (value: number) => void;
-  setBatteryCapacity: (value: number) => void;
-  setAvgDailyConsumption: (value: number) => void;
+  setCity: (city: string) => Promise<void>;
+  setCountry: (country: string) => Promise<void>;
+  setState: (state: string) => Promise<void>;
+  setPincode: (pincode: string) => Promise<void>;
+  setPanelCapacity: (value: number) => Promise<void>;
+  setBatteryCapacity: (value: number) => Promise<void>;
+  setAvgDailyConsumption: (value: number) => Promise<void>;
   addAppliance: (appliance: Appliance) => void;
   removeAppliance: (id: number) => void;
 }
@@ -41,6 +55,9 @@ const SolarContext = createContext<SolarContextType | undefined>(undefined);
 
 export function SolarProvider({ children }: { children: ReactNode }) {
   const [city, setCityState] = useState("Delhi");
+  const [country, setCountryState] = useState("India");
+  const [state, setStateState] = useState("");
+  const [pincode, setPincodeState] = useState("");
   const [panelCapacity, setPanelCapacityState] = useState(5);
   const [batteryCapacity, setBatteryCapacityState] = useState(10);
   const [avgDailyConsumption, setAvgDailyConsumptionState] = useState(18);
@@ -52,6 +69,9 @@ export function SolarProvider({ children }: { children: ReactNode }) {
     Promise.all([fetchConfig(), fetchAppliances()])
       .then(([config, apps]) => {
         setCityState(config.city);
+        setCountryState(config.country || "India");
+        setStateState(config.state || "");
+        setPincodeState(config.pincode || "");
         setPanelCapacityState(config.panelCapacity);
         setBatteryCapacityState(config.batteryCapacity);
         setAvgDailyConsumptionState(config.avgDailyConsumption);
@@ -60,6 +80,23 @@ export function SolarProvider({ children }: { children: ReactNode }) {
       .catch((err) => console.error("Failed to load data", err));
   }, []);
 
+  async function fetchWeather() {
+    try {
+      if (!city) return null;
+      const data = await clientFetchWeather();
+      // Handle legacy/new format mismatch safely
+      if (data.current) return data;
+      // Fallback if old API response
+      return {
+        current: data,
+        today: [],
+        tomorrow: []
+      };
+    } catch (error) {
+      console.error("Failed to fetch weather:", error);
+      return null;
+    }
+  }
   // Fetch weather when city changes or initially
   // Fetch weather when city changes or initially
   useEffect(() => {
@@ -68,29 +105,42 @@ export function SolarProvider({ children }: { children: ReactNode }) {
     });
   }, [city]);
 
-  function setCity(city: string) {
+  async function setCity(city: string) {
     setCityState(city);
-    updateConfig({ city }).then(() => {
-      // Re-fetch weather after city update
-      fetchWeather().then((data) => {
-        if (data) setWeather(data);
-      });
-    });
+    await updateConfig({ city });
+    // Re-fetch weather after city update
+    const data = await fetchWeather();
+    if (data) setWeather(data);
   }
 
-  function setPanelCapacity(value: number) {
+  async function setCountry(country: string) {
+    setCountryState(country);
+    await updateConfig({ country });
+  }
+
+  async function setState(state: string) {
+    setStateState(state);
+    await updateConfig({ state });
+  }
+
+  async function setPincode(pincode: string) {
+    setPincodeState(pincode);
+    await updateConfig({ pincode });
+  }
+
+  async function setPanelCapacity(value: number) {
     setPanelCapacityState(value);
-    updateConfig({ panelCapacity: value });
+    await updateConfig({ panelCapacity: value });
   }
 
-  function setBatteryCapacity(value: number) {
+  async function setBatteryCapacity(value: number) {
     setBatteryCapacityState(value);
-    updateConfig({ batteryCapacity: value });
+    await updateConfig({ batteryCapacity: value });
   }
 
-  function setAvgDailyConsumption(value: number) {
+  async function setAvgDailyConsumption(value: number) {
     setAvgDailyConsumptionState(value);
-    updateConfig({ avgDailyConsumption: value });
+    await updateConfig({ avgDailyConsumption: value });
   }
 
   function addAppliance(appliance: Appliance) {
@@ -110,12 +160,18 @@ export function SolarProvider({ children }: { children: ReactNode }) {
     <SolarContext.Provider
       value={{
         city,
+        country,
+        state,
+        pincode,
         panelCapacity,
         batteryCapacity,
         avgDailyConsumption,
         appliances,
         weather,
         setCity,
+        setCountry,
+        setState,
+        setPincode,
         setPanelCapacity,
         setBatteryCapacity,
         setAvgDailyConsumption,

@@ -5,6 +5,7 @@ export interface WeatherData {
   sunHours: number; // hours
   humidity?: number; // %
   windSpeed?: number; // km/h
+  predictedProduction?: number; // kWh
 }
 
 export interface SolarConfig {

@@ -14,7 +14,10 @@ export interface User {
     id: string;
     username: string;
     password?: string; // In a real app, hash this!
-    city: string;
+    city: string; // Keep for weather API
+    country: string;
+    state: string;
+    pincode: string;
     panelCapacity: number;
     batteryCapacity: number;
     avgDailyConsumption: number;

@@ -61,6 +61,9 @@ export async function fetchConfig() {
 export async function updateConfig(
     config: Partial<{
         city: string;
+        country: string;
+        state: string;
+        pincode: string;
         panelCapacity: number;
         batteryCapacity: number;
         avgDailyConsumption: number;
@@ -131,7 +134,8 @@ export async function fetchWeather() {
             rainProbability: 0,
             sunHours: 8,
             humidity: 50,
-            windSpeed: 10
+            windSpeed: 10,
+            predictedProduction: 12.5
         };
     }
 }
