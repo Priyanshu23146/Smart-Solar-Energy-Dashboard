@@ -11,7 +11,7 @@ import {
   ResponsiveContainer,
   Legend
 } from "recharts";
-import type { WeatherData } from "../Logic/types";
+import type { WeatherData } from "../logic/types";
 
 export default function Dashboard() {
   const {
