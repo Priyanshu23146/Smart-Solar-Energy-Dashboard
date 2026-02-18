@@ -1,8 +1,12 @@
-import type { Express, Request, Response, NextFunction } from "express";
+import type { Router, Request, Response, NextFunction } from "express";
 import { readDb, writeDb, User } from "./db";
+import { predictEnergy } from "./logic/energyPredict";
 import path from "path";
 
-export function setupRoutes(app: Express) {
+
+
+export function setupRoutes(app: Router) {
+
     // Middleware to get current user
     const getUser = (req: Request, res: Response): User | undefined => {
         const userId = req.headers["x-user-id"] as string;
@@ -219,29 +223,12 @@ export function setupRoutes(app: Express) {
                 };
             });
 
-            // 3. C++ Batch Prediction
-            const cppPath = path.join(__dirname, "../cpp/bin/energy_predict.exe");
-            const capacity = user.panelCapacity;
+            // 3. TS Batch Prediction (Replaces C++ Binary)
             let predictions: number[] = [];
-
             try {
-                const { execFile } = require("child_process");
-                const util = require("util");
-                const execFilePromise = util.promisify(execFile);
-
-                // Pass capacity and CSV string
-                // Note: Command line args have length limits, 48 hours of simple CSV should be fine (~1KB)
-                const { stdout } = await execFilePromise(cppPath, [
-                    String(capacity),
-                    csvInput
-                ]);
-
-                // Parse comma-separated output
-                predictions = stdout.trim().split(',').map((p: string) => parseFloat(p) || 0);
-
-            } catch (cppError) {
-                console.error("C++ Batch Prediction failed:", cppError);
-                // Fallback: zero predictions
+                predictions = predictEnergy(user.panelCapacity, csvInput);
+            } catch (err) {
+                console.error("Prediction Logic Failed:", err);
                 predictions = new Array(processedIntervals.length).fill(0);
             }
 

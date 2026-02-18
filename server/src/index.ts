@@ -11,11 +11,17 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// Auth Routes
-app.use("/auth", authRoutes);
+// Create API Router
+const apiRouter = express.Router();
 
-// Protected Routes (User-specific)
-setupRoutes(app);
+// Auth Routes within API
+apiRouter.use("/auth", authRoutes);
+
+// Protected Routes within API
+setupRoutes(apiRouter);
+
+// Mount API Router
+app.use("/api", apiRouter);
 
 // Serve Frontend (Deployment)
 const distPath = path.join(__dirname, "../../dist");
@@ -26,6 +32,12 @@ app.get("*", (req, res) => {
     res.sendFile(path.join(distPath, "index.html"));
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+// Export app for Vercel (serverless)
+export default app;
+
+// Only listen if run directly (not imported)
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`Server running on http://localhost:${PORT}`);
+    });
+}

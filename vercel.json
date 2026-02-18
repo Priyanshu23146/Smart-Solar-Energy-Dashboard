@@ -1,0 +1,9 @@
+{
+    "rewrites": [
+        {
+            "source": "/api/:match*",
+            "destination": "/api"
+        }
+    ],
+    "buildCommand": "npm run build"
+}
