@@ -28,7 +28,7 @@ const distPath = path.join(__dirname, "../../dist");
 app.use(express.static(distPath));
 
 // Catch-all route to serve index.html for SPA client-side routing
-app.get("*", (req, res) => {
+app.get("*", (req: express.Request, res: express.Response) => {
     res.sendFile(path.join(distPath, "index.html"));
 });
 
