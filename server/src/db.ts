@@ -1,7 +1,8 @@
 import fs from "fs";
 import path from "path";
 
-const DATA_DIR = path.join(__dirname, "../data");
+const IS_VERCEL = process.env.VERCEL === "1";
+const DATA_DIR = IS_VERCEL ? path.join("/tmp", "smart-solar-data") : path.join(__dirname, "../data");
 const DB_FILE = path.join(DATA_DIR, "db.json");
 
 export interface Appliance {

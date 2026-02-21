@@ -21,17 +21,29 @@ function getHeaders() {
     return headers;
 }
 
+// Helper to safely parse JSON or return original text on error
+async function safeJson(res: Response) {
+    const text = await res.text();
+    try {
+        return JSON.parse(text);
+    } catch (e) {
+        // If not JSON, return the raw text as an error
+        console.error("Failed to parse JSON response:", text);
+        return { error: text || "Invalid response from server" };
+    }
+}
+
 export async function loginApi(credentials: unknown) {
     const res = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(credentials),
     });
+    const data = await safeJson(res);
     if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || "Login failed");
+        throw new Error(data.error || "Login failed");
     }
-    return res.json();
+    return data;
 }
 
 export async function signupApi(userData: unknown) {
@@ -40,18 +52,19 @@ export async function signupApi(userData: unknown) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
     });
+    const data = await safeJson(res);
     if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || "Signup failed");
+        throw new Error(data.error || "Signup failed");
     }
-    return res.json();
+    return data;
 }
 
 export async function fetchConfig() {
     try {
         const res = await fetch(`${API_URL}/config`, { headers: getHeaders() });
-        if (!res.ok) throw new Error("Network response was not ok");
-        return await res.json();
+        const data = await safeJson(res);
+        if (!res.ok) throw new Error(data.error || "Network response was not ok");
+        return data;
     } catch (error) {
         console.warn("Failed to fetch config, using default:", error);
         return DEFAULT_CONFIG;
@@ -75,8 +88,9 @@ export async function updateConfig(
             headers: getHeaders(),
             body: JSON.stringify(config),
         });
-        if (!res.ok) throw new Error("Network response was not ok");
-        return await res.json();
+        const data = await safeJson(res);
+        if (!res.ok) throw new Error(data.error || "Network response was not ok");
+        return data;
     } catch (error) {
         console.error("Failed to update config:", error);
         return config; // Optimistic return
@@ -86,8 +100,9 @@ export async function updateConfig(
 export async function fetchAppliances() {
     try {
         const res = await fetch(`${API_URL}/appliances`, { headers: getHeaders() });
-        if (!res.ok) throw new Error("Network response was not ok");
-        return await res.json();
+        const data = await safeJson(res);
+        if (!res.ok) throw new Error(data.error || "Network response was not ok");
+        return data;
     } catch (error) {
         console.warn("Failed to fetch appliances, returning empty list:", error);
         return [];
@@ -101,8 +116,9 @@ export async function addAppliance(name: string, power: number) {
             headers: getHeaders(),
             body: JSON.stringify({ name, power }),
         });
-        if (!res.ok) throw new Error("Network response was not ok");
-        return await res.json();
+        const data = await safeJson(res);
+        if (!res.ok) throw new Error(data.error || "Network response was not ok");
+        return data;
     } catch (error) {
         console.error("Failed to add appliance:", error);
         // Return a temporary object so UI updates
@@ -124,8 +140,9 @@ export async function deleteAppliance(id: number) {
 export async function fetchWeather() {
     try {
         const res = await fetch(`${API_URL}/weather`, { headers: getHeaders() });
-        if (!res.ok) throw new Error("Network response was not ok");
-        return await res.json();
+        const data = await safeJson(res);
+        if (!res.ok) throw new Error(data.error || "Network response was not ok");
+        return data;
     } catch (error) {
         console.warn("Failed to fetch weather, returning default:", error);
         return {
