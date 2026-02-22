@@ -12,6 +12,19 @@
       "country": "India",
       "state": "Uttar Pradesh",
       "pincode": "246745"
+    },
+    {
+      "id": "1771761517055",
+      "username": "Princekumar7055",
+      "password": "$2a$10$Ju0F7zgwc16Lz9gpSPkYbussFFgD2TAgzuE654OLuGbZZYwRQxYa6",
+      "city": "Dhampur",
+      "country": "India",
+      "state": "",
+      "pincode": "",
+      "panelCapacity": 5,
+      "batteryCapacity": 10,
+      "avgDailyConsumption": 18,
+      "appliances": []
     }
   ]
 }
