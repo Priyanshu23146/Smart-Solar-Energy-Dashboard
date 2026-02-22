@@ -32,29 +32,37 @@ export interface Database {
     users: User[];
 }
 
-// Ensure DB exists
-try {
-    if (!fs.existsSync(DATA_DIR)) {
-        fs.mkdirSync(DATA_DIR, { recursive: true });
+// Lazy Init function
+function ensureDb() {
+    try {
+        if (!fs.existsSync(DATA_DIR)) {
+            fs.mkdirSync(DATA_DIR, { recursive: true });
+            console.log(`[DB] Created directory: ${DATA_DIR}`);
+        }
+        if (!fs.existsSync(DB_FILE)) {
+            fs.writeFileSync(DB_FILE, JSON.stringify({ users: [] }, null, 2));
+            console.log("[DB] Created new database file");
+        }
+    } catch (err) {
+        console.error("[DB] Initialization error:", err);
     }
-    if (!fs.existsSync(DB_FILE)) {
-        fs.writeFileSync(DB_FILE, JSON.stringify({ users: [] }, null, 2));
-        console.log("[DB] Created new database file");
-    }
-} catch (err) {
-    console.error("[DB] Initialization error:", err);
 }
 
 export function readDb(): Database {
+    ensureDb();
     try {
         const content = fs.readFileSync(DB_FILE, "utf-8");
         return JSON.parse(content);
     } catch (error) {
-        // If file is empty or corrupt, return default
         return { users: [] };
     }
 }
 
 export function writeDb(data: Database) {
-    fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
+    ensureDb();
+    try {
+        fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
+    } catch (err) {
+        console.error("[DB] Write error:", err);
+    }
 }

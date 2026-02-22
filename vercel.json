@@ -6,10 +6,5 @@
             "destination": "/api/index.ts"
         }
     ],
-    "functions": {
-        "api/index.ts": {
-            "includeFiles": "server/src/**"
-        }
-    },
     "buildCommand": "npm run build"
 }
