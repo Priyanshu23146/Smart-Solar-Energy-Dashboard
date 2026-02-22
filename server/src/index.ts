@@ -22,6 +22,7 @@ setupRoutes(apiRouter);
 
 // Mount API Router
 app.use("/api", apiRouter);
+console.log("[SERVER] API routes mounted at /api");
 
 // Serve Frontend (Deployment)
 const distPath = path.join(__dirname, "../../dist");

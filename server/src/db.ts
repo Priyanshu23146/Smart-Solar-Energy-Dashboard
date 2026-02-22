@@ -2,8 +2,11 @@ import fs from "fs";
 import path from "path";
 
 const IS_VERCEL = process.env.VERCEL === "1";
-const DATA_DIR = IS_VERCEL ? path.join("/tmp", "smart-solar-data") : path.join(__dirname, "../data");
+const DATA_DIR = IS_VERCEL ? "/tmp" : path.join(__dirname, "../data");
 const DB_FILE = path.join(DATA_DIR, "db.json");
+
+console.log(`[DB] Environment: ${IS_VERCEL ? "Vercel" : "Local"}`);
+console.log(`[DB] Using file: ${DB_FILE}`);
 
 export interface Appliance {
     id: number;
@@ -30,11 +33,16 @@ export interface Database {
 }
 
 // Ensure DB exists
-if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-}
-if (!fs.existsSync(DB_FILE)) {
-    fs.writeFileSync(DB_FILE, JSON.stringify({ users: [] }, null, 2));
+try {
+    if (!fs.existsSync(DATA_DIR)) {
+        fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+    if (!fs.existsSync(DB_FILE)) {
+        fs.writeFileSync(DB_FILE, JSON.stringify({ users: [] }, null, 2));
+        console.log("[DB] Created new database file");
+    }
+} catch (err) {
+    console.error("[DB] Initialization error:", err);
 }
 
 export function readDb(): Database {
