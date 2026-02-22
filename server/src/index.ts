@@ -5,6 +5,11 @@ import { setupRoutes } from "./routes";
 
 import path from "path";
 import fs from "fs";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -20,10 +25,6 @@ apiRouter.use("/auth", authRoutes);
 
 // Protected Routes within API
 setupRoutes(apiRouter);
-
-// Health check routes
-app.get("/api/health", (req, res) => res.json({ status: "ok", env: process.env.VERCEL ? "Vercel" : "Local", time: new Date().toISOString() }));
-app.get("/api/ping", (req, res) => res.send("pong"));
 
 // Mount API Router
 app.use("/api", apiRouter);

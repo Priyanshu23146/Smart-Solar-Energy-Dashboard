@@ -1,5 +1,10 @@
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const IS_VERCEL = process.env.VERCEL === "1";
 const DATA_DIR = IS_VERCEL ? "/tmp" : path.join(__dirname, "../data");
@@ -36,15 +41,24 @@ export interface Database {
 function ensureDb() {
     try {
         if (!fs.existsSync(DATA_DIR)) {
+            console.log(`[DB] Directory missing, creating: ${DATA_DIR}`);
             fs.mkdirSync(DATA_DIR, { recursive: true });
-            console.log(`[DB] Created directory: ${DATA_DIR}`);
         }
         if (!fs.existsSync(DB_FILE)) {
+            console.log(`[DB] File missing, creating: ${DB_FILE}`);
             fs.writeFileSync(DB_FILE, JSON.stringify({ users: [] }, null, 2));
-            console.log("[DB] Created new database file");
+        } else {
+            // Test if we can read it
+            const stats = fs.statSync(DB_FILE);
+            if (stats.size === 0) {
+                console.warn("[DB] File is empty, resetting...");
+                fs.writeFileSync(DB_FILE, JSON.stringify({ users: [] }, null, 2));
+            }
         }
     } catch (err) {
-        console.error("[DB] Initialization error:", err);
+        console.error("[DB] Initialization error (CRITICAL):", err);
+        // Throwing here might reveal more in Vercel logs than just a generic 500
+        throw new Error(`Database Initialization Failed: ${err}`);
     }
 }
 
